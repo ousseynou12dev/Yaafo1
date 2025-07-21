@@ -29,7 +29,7 @@ class UserDashboardController extends Controller
         $q->where('user_id', $userId);
     })->count();
 
-    return view('user.dashboard', compact('alertesRecentes', 'alertesCount', 'photosCount', 'projetsCount'));
+    return view('users.dashboard', compact('alertesRecentes', 'alertesCount', 'photosCount', 'projetsCount'));
 }
 
 }
