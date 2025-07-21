@@ -8,9 +8,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    curl \
-    nodejs \
-    npm
+    curl
 
 RUN docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath gd
 
@@ -22,18 +20,14 @@ COPY . .
 
 RUN composer install --optimize-autoloader --no-dev
 
-# Installer Node modules et builder assets avec npm
-RUN npm install
-RUN npm run build
-
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
-
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Exposer le port HTTP (80) au lieu de 9000
+# Supprimer ces lignes du build :
+# RUN php artisan config:cache
+# RUN php artisan route:cache
+# RUN php artisan view:cache
+
 EXPOSE 80
 
-# Lancer le serveur PHP interne en exposant le dossier public/
+# Lancer le serveur PHP interne
 CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
