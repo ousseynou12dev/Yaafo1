@@ -13,29 +13,27 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip
 
-# Installer les extensions PHP nécessaires
+# Extensions PHP nécessaires
 RUN docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath gd
 
 # Installer Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier tous les fichiers
 COPY . .
 
-# Installer les dépendances PHP
+# Installer les dépendances Laravel
 RUN composer install --optimize-autoloader --no-dev
 
-# ✅ Installer les dépendances JS et compiler les assets
+# Compiler les assets CSS/JS
 RUN npm install && npm run build
 
-# Donner les bons droits à Laravel
+# Donner les droits
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Exposer le port HTTP
-EXPOSE 80
+# Exposer le port automatiquement défini par Render
+EXPOSE 10000
 
-# Lancer le serveur PHP interne
-CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
+# ✅ Corrigé : Render utilisera la variable d’environnement $PORT
+CMD ["php", "-S", "0.0.0.0:$PORT", "-t", "public"]
