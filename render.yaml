@@ -20,7 +20,7 @@ services:
       - key: APP_DEBUG
         value: 'false'
       - key: APP_KEY
-        value: base64:Ta_clef_app # remplace par ta vraie clé (ou laisse artisan la générer)
+        value: base64:k73vF7Oxi7OY0IW/qeZIgzG5VvjJnwDgXJJWyUnqYLs=
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
